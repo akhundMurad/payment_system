@@ -12,6 +12,7 @@ class BankAccount(Base):
     # Table fields
     pk = Column(Integer, primary_key=True)
     api_key = Column(String(512))
+    user_pk = Column(Integer, ForeignKey('user.pk'))
 
     cards = relationship("Card")
     owner = relationship('User', back_populates='bank_account')

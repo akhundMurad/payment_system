@@ -3,7 +3,7 @@ from datetime import datetime
 from backend.database.config import Base
 
 from sqlalchemy.orm import relationship
-from sqlalchemy import String, Integer, Text, DateTime, Date, Boolean, Column
+from sqlalchemy import String, Integer, Text, DateTime, Date, Boolean, Column, ForeignKey
 
 
 class User(Base):

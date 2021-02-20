@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-import backend.database.schemas.banking as schemas
-
 
 class UserBase(BaseModel):
     email: str
@@ -16,7 +14,9 @@ class UserCreate(UserBase):
 class User(UserBase):
     pk: int
     is_active: bool
-    bank_account: schemas.BankingAccount
 
     class Config:
         orm_mode = True
+
+
+UserToImport = User

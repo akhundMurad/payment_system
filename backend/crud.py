@@ -45,8 +45,7 @@ def get_users(
 
 def create_user(
         db: Session,
-        user: auth_schemas.UserCreate,
-        account: auth_schemas.BankingAccount
+        user: auth_schemas.UserCreate
 ):
     """
     Creating user
@@ -54,7 +53,6 @@ def create_user(
 
     db_user = auth_models.User(
         **user.dict(),
-        bank_account=account
     )
 
     db.add(db_user)

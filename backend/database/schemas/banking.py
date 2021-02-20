@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 
-import backend.database.schemas.auth as schemas
+from backend.database.schemas.auth import User
 
 
 class CardBase(BaseModel):
@@ -20,7 +20,7 @@ class CardCreate(CardBase):
 
 
 class BankingAccountCreate(BankingAccountBase):
-    owner: schemas.User
+    owner: User
 
 
 class Card(CardBase):
@@ -34,7 +34,7 @@ class Card(CardBase):
 class BankingAccount(BankingAccountBase):
     pk: int
     is_active: bool
-    owner: schemas.User
+    owner: User
     cards: List[Card]
 
     class Config:

@@ -38,6 +38,10 @@ def create_user(
     if db_user:
         raise HTTPException(status_code=400, detail='Email already exists')
 
+    user_created = crud.create_user(db, user)
+
+    return user_created
+
 
 @app.get('/auth/all', response_model=List[auth_schemas.User])
 def get_users(

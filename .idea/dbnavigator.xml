@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -26,8 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="2c549761-5e9c-4ffc-bf8e-e616f96c7fff">
-        <schema name="information_schema" object-types="sequence, function, table, view" />
-        <schema name="public" object-types="dataset trigger, sequence, column, function, constraint, index, table, view" />
+        <schema name="public" object-types="sequence, function, view, table, column, index, constraint, dataset trigger" />
       </connection>
     </loaded-nodes>
   </component>
@@ -41,6 +40,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="2c549761-5e9c-4ffc-bf8e-e616f96c7fff" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="2c549761-5e9c-4ffc-bf8e-e616f96c7fff" dataset="public.user" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
