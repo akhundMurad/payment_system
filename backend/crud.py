@@ -1,5 +1,6 @@
 from typing import List
 
+from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from backend.database.schemas import auth as auth_schemas

@@ -3,7 +3,7 @@ from typing import List
 from datetime import timedelta
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from sqlalchemy.orm import Session
 
@@ -20,7 +20,11 @@ from backend.utils import oauth2_scheme
 Base.metadata.create_all(bind=engine)
 
 
-router = FastAPI()
+router = APIRouter(
+    prefix='/auth',
+    tags=['auth'],
+    dependencies=[Depends(oauth2_scheme)]
+)
 
 
 @router.post('/', response_model=auth_schemas.User)
@@ -40,7 +44,7 @@ def create_user(
     return user_created
 
 
-@router.get('/all', response_model=List[auth_schemas.User], dependencies=[Depends(oauth2_scheme)])
+@router.get('/all', response_model=List[auth_schemas.User])
 def get_users(
         skip: int = 0,
         limit: int = 500,
@@ -51,7 +55,7 @@ def get_users(
     return users
 
 
-@router.get('/{pk}', response_model=auth_schemas.User, dependencies=[Depends(oauth2_scheme)])
+@router.get('/{pk}', response_model=auth_schemas.User)
 def get_user(
         pk: int,
         db: Session = Depends(dependable.get_db)
@@ -63,7 +67,7 @@ def get_user(
     return user
 
 
-@router.post('/bank', response_model=banking_schemas.BankingAccount, dependencies=[Depends(oauth2_scheme)])
+@router.post('/bank', response_model=banking_schemas.BankingAccount)
 def create_banking_account(
         account: banking_schemas.BankingAccountCreate,
         cards: List[banking_schemas.Card],
@@ -76,7 +80,7 @@ def create_banking_account(
     return account
 
 
-@router.post('/bank/card', response_model=banking_schemas.Card, dependencies=[Depends(oauth2_scheme)])
+@router.post('/bank/card', response_model=banking_schemas.Card)
 def create_card(
         card: banking_schemas.CardCreate,
         owner_pk: int,

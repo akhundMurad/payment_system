@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -19,4 +20,14 @@ class User(UserBase):
         orm_mode = True
 
 
-UserToImport = User
+class UserInDB(UserCreate, User):
+    pass
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(Token):
+    username: Optional[str] = None
