@@ -2,7 +2,7 @@ from typing import List
 
 from datetime import timedelta
 
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import  OAuth2PasswordRequestForm
 from fastapi import FastAPI, Depends, HTTPException, status
 
 from sqlalchemy.orm import Session
@@ -14,16 +14,16 @@ from backend import dependable
 from backend.database.schemas import auth as auth_schemas
 from backend.database.schemas import banking as banking_schemas
 
-from backend.database.config import SessionLocal, Base, engine
+from backend.database.config import  Base, engine
 from backend.utils import oauth2_scheme
 
 Base.metadata.create_all(bind=engine)
 
 
-router = FastAPI()
+app = FastAPI()
 
 
-@router.post('/', response_model=auth_schemas.User)
+@app.post('/', response_model=auth_schemas.User)
 def create_user(
         user: auth_schemas.UserCreate,
         db: Session = Depends(dependable.get_db)
@@ -40,7 +40,7 @@ def create_user(
     return user_created
 
 
-@router.get('/all', response_model=List[auth_schemas.User], dependencies=[Depends(oauth2_scheme)])
+@app.get('/all', response_model=List[auth_schemas.User], dependencies=[Depends(oauth2_scheme)])
 def get_users(
         skip: int = 0,
         limit: int = 500,
@@ -51,7 +51,7 @@ def get_users(
     return users
 
 
-@router.get('/{pk}', response_model=auth_schemas.User, dependencies=[Depends(oauth2_scheme)])
+@app.get('/{pk}', response_model=auth_schemas.User, dependencies=[Depends(oauth2_scheme)])
 def get_user(
         pk: int,
         db: Session = Depends(dependable.get_db)
@@ -63,7 +63,7 @@ def get_user(
     return user
 
 
-@router.post('/bank', response_model=banking_schemas.BankingAccount, dependencies=[Depends(oauth2_scheme)])
+@app.post('/bank', response_model=banking_schemas.BankingAccount, dependencies=[Depends(oauth2_scheme)])
 def create_banking_account(
         account: banking_schemas.BankingAccountCreate,
         cards: List[banking_schemas.Card],
@@ -76,7 +76,7 @@ def create_banking_account(
     return account
 
 
-@router.post('/bank/card', response_model=banking_schemas.Card, dependencies=[Depends(oauth2_scheme)])
+@app.post('/bank/card', response_model=banking_schemas.Card, dependencies=[Depends(oauth2_scheme)])
 def create_card(
         card: banking_schemas.CardCreate,
         owner_pk: int,
@@ -88,7 +88,7 @@ def create_card(
     return card
 
 
-@router.post('/token', response_model=auth_schemas.Token)
+@app.post('/token', response_model=auth_schemas.Token)
 def login_for_access_token(
        form_data: OAuth2PasswordRequestForm = Depends(),
        db: Session = Depends(dependable.get_db)
@@ -108,7 +108,7 @@ def login_for_access_token(
     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-@router.get('/me', response_model=auth_schemas.User)
+@app.get('/me', response_model=auth_schemas.User)
 def read_users_me(
     current_user: auth_schemas.User = Depends(utils.get_active_user),
 ):
