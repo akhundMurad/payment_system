@@ -4,6 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend import crud
+from backend import dependable
 
 from backend.database.schemas import auth as auth_schemas
 from backend.database.schemas import banking as banking_schemas
@@ -20,18 +21,10 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @app.post('/auth/', response_model=auth_schemas.User)
 def create_user(
         user: auth_schemas.UserCreate,
-        db: Session = Depends(get_db)
+        db: Session = Depends(dependable.get_db)
 ):
 
     db_user = crud.get_user_by_email(db, email=user.email)
@@ -47,7 +40,7 @@ def create_user(
 def get_users(
         skip: int = 0,
         limit: int = 500,
-        db: Session = Depends(get_db)
+        db: Session = Depends(dependable.get_db)
 ):
 
     users = crud.get_users(db, skip, limit)
@@ -57,7 +50,7 @@ def get_users(
 @app.get('/auth/{pk}', response_model=auth_schemas.User)
 def get_user(
         pk: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(dependable.get_db)
 ):
 
     user = crud.get_user(db, pk)
@@ -71,7 +64,7 @@ def create_banking_account(
         account: banking_schemas.BankingAccountCreate,
         cards: List[banking_schemas.Card],
         owner: auth_schemas.User,
-        db: Session = Depends(get_db)
+        db: Session = Depends(dependable.get_db)
 ):
     account = crud.create_banking_account(db, account=account, cards=cards, owner=owner)
     if account:
@@ -83,7 +76,7 @@ def create_banking_account(
 def create_card(
         card: banking_schemas.CardCreate,
         owner_pk: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(dependable.get_db)
 ):
     card = crud.create_card(db, card=card, owner_pk=owner_pk)
     if card:
